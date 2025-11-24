@@ -1,19 +1,26 @@
 const express = require("express");
+const path = require("path");
+
 const app = express();
-const port = 3000;
+const PORT = 3000;
 
-// serve static files from public folder
-app.use(express.static("public"));
+// Serve static files from /public
+app.use(express.static(path.join(__dirname, "public")));
 
-// web service endpoint: add two numbers
+// Add two numbers from user input
 app.get("/add", (req, res) => {
   const num1 = parseFloat(req.query.num1);
   const num2 = parseFloat(req.query.num2);
 
-  const sum = num1 + num2;
-  res.send({ result: sum });
+  if (isNaN(num1) || isNaN(num2)) {
+    return res.status(400).json({ error: "Please enter two valid numbers." });
+  }
+
+  const result = num1 + num2;
+  res.json({ num1, num2, result });
 });
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server is running at http://localhost:${PORT}`);
 });
