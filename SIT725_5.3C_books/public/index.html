@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Books Catalogue</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1 { margin-bottom: 10px; }
+    #booksList, #bookDetails {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-top: 10px;
+      min-height: 80px;
+    }
+    .book-item {
+      padding: 5px;
+      cursor: pointer;
+    }
+    .book-item:hover {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Books Catalogue developed by s219345761</h1>
+
+  <p>Click the button below to get all book items from the server:</p>
+  <button id="getAllBtn">Get all books</button>
+
+  <h3>Books</h3>
+  <div id="booksList"></div>
+
+  <h3>Book details</h3>
+  <div id="bookDetails"></div>
+
+  <script>
+    const btn = document.getElementById('getAllBtn');
+    const listDiv = document.getElementById('booksList');
+    const detailsDiv = document.getElementById('bookDetails');
+
+    function renderList(items) {
+      listDiv.innerHTML = '';
+      if (!Array.isArray(items) || items.length === 0) {
+        listDiv.textContent = 'No books';
+        return;
+      }
+
+      items.forEach((b) => {
+        const p = document.createElement('div');
+        p.className = 'book-item';
+        const price = (typeof b.price === 'string') ? b.price : (b.price?.numberDecimal || '');
+        p.textContent = `${b.title} ${price} ${b.currency || 'AUD'}`;
+
+        // click to load details
+        p.addEventListener('click', () => fetchBookById(b.id));
+        listDiv.appendChild(p);
+      });
+    }
+
+    async function fetchBooks() {
+      listDiv.textContent = 'Loading...';
+      detailsDiv.textContent = '';
+      try {
+        const res = await fetch('/api/books');
+        const body = await res.json();
+        renderList(body.data || []);
+      } catch (err) {
+        console.error(err);
+        listDiv.textContent = 'Error fetching books';
+      }
+    }
+
+    async function fetchBookById(id) {
+      detailsDiv.textContent = 'Loading details...';
+      try {
+        const res = await fetch(`/api/books/${id}`);
+        const body = await res.json();
+        const b = body.data;
+        if (!b) {
+          detailsDiv.textContent = 'Book not found';
+          return;
+        }
+
+        const price = (typeof b.price === 'string') ? b.price : (b.price?.numberDecimal || '');
+
+        detailsDiv.innerHTML = `
+          <p><strong>Title:</strong> ${b.title}</p>
+          <p><strong>Author:</strong> ${b.author}</p>
+          <p><strong>Year:</strong> ${b.year}</p>
+          <p><strong>Genre:</strong> ${b.genre}</p>
+          <p><strong>Summary:</strong> ${b.summary}</p>
+          <p><strong>Price (AUD):</strong> ${price}</p>
+        `;
+      } catch (err) {
+        console.error(err);
+        detailsDiv.textContent = 'Error fetching details';
+      }
+    }
+
+    btn.addEventListener('click', fetchBooks);
+  </script>
+</body>
+</html>
+
