@@ -1,0 +1,19 @@
+const Book = require('../models/book.model');
+
+
+// Get all books
+async function getAllBooks() {
+  // .lean({ getters: true }) so Decimal128 comes out as string
+  return Book.find({}).lean({ getters: true });
+}
+
+// Get one book by its "id" field (b1, b2, ...)
+async function getBookById(id) {
+  return Book.findOne({ id }).lean({ getters: true });
+}
+
+module.exports = {
+  getAllBooks,
+  getBookById,
+};
+

@@ -1,15 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const Controllers = require('../controllers');
 
-// /api/books
-router.get('/books', Controllers.bookController.getAllBooks);
+const booksController = require('../controllers/books.controller');
 
-// /api/books/:id
-router.get('/books/:id', Controllers.bookController.getBookById);
+// Existing GET routes
+router.get('/api/books', booksController.getAllBooks);
+router.get('/api/books/:id', booksController.getBookById);
 
-// /api/integrity-check42 -> 204
-router.get('/integrity-check42', (req, res) => res.sendStatus(204));
+// Safe-write routes (5.4D)
+router.post('/api/books', booksController.createBook);
+router.put('/api/books/:id', booksController.updateBook);
 
 module.exports = router;
-
