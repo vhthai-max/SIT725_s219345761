@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "express": "^5.2.1",
+    "mongoose": "^9.0.1"
+  },
+  "name": "sit725_s219345761",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vhthai-max/SIT725_s219345761.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vhthai-max/SIT725_s219345761/issues"
+  },
+  "homepage": "https://github.com/vhthai-max/SIT725_s219345761#readme",
+  "description": ""
+}
