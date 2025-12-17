@@ -24,12 +24,9 @@ app.use(express.urlencoded({ extended: false }));
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
-//5.4 Requirement
-app.get('/api/integrity-check42', (req, res) => {
-  return res.status(204).send();
-});
 
 // 3. Routes
 const booksRoute = require('./routes/books.routes');
 app.use(booksRoute);
+
 
